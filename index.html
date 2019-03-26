@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Three</title>
+  <style type="text/css">
+    body {
+      margin: 0;
+    }
+    canvas {
+      cursor: grab;
+    }
+  </style>
+</head>
+<body>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.min.js'></script>
+  <script src='https://rawgit.com/mrdoob/three.js/dev/build/three.js'></script>
+  <script src='https://rawgit.com/mrdoob/three.js/dev/examples/js/loaders/GLTFLoader.js'></script>
+  <script src="https://rawgit.com/mrdoob/three.js/dev/examples/js/controls/OrbitControls.js"></script>
+  <script type="text/javascript">
+    var scene = new THREE.Scene();
+    scene.background = new THREE.Color( 0x00befd );
+    var camera = new THREE.PerspectiveCamera( 105, window.innerWidth / window.innerHeight, 0.1, 1000 );
+    var controls = new THREE.OrbitControls( camera );
+
+    var renderer = new THREE.WebGLRenderer();
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    document.body.appendChild( renderer.domElement );
+
+    var light2 = new THREE.AmbientLight( 0xffffff, 0.5);
+    scene.add( light2 );
+
+    var light = new THREE.PointLight( 0xffffff, 1);
+    light.position.set( -50, 50, 50 );
+    scene.add( light );
+
+    camera.position.z = 2.5;
+    camera.position.x = -50;
+    camera.position.y = 20;
+    controls.update();
+
+    var mario;
+
+    var loader = new THREE.GLTFLoader();
+
+    loader.load('./mario.gltf', function(gltf) {
+      mario = gltf.scene;
+      mario.position.z = -10;
+      mario.position.y = -10;
+      scene.add(gltf.scene);
+    }, undefined , function(error) {
+      console.log(error)
+    } );
+
+    function animate() {
+      requestAnimationFrame( animate );
+      controls.update();
+      renderer.render( scene, camera );
+    }
+    animate();
+
+  </script>
+</body>
+</html>
